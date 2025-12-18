@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.4.4</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.evolveum</groupId>
+	<artifactId>validation-services</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>validation-services</name>
+	<description>Services used for validation of generated code</description>
+	<url/>
+	<licenses>
+		<license>
+			<name>Apache License v2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+		<license>
+			<name>European Union Public License</name>
+			<url>https://joinup.ec.europa.eu/collection/eupl/eupl-text-11-12</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<argLine/>
+		<java.version>21</java.version>
+		<testng.version>7.11.0</testng.version>
+		<surefire-testng.version>3.1.2</surefire-testng.version>
+		<mockito-testng.version>0.5.2</mockito-testng.version>
+		<scim-connector.version>0.1-SNAPSHOT</scim-connector.version>
+		<jetbrains-annotations.version>21.0.1</jetbrains-annotations.version>
+		<midpoint.version>4.11-SNAPSHOT</midpoint.version>
+		<prism.version>4.11-SNAPSHOT</prism.version>
+	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>3.4.4</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<dependencies>
+		<!-- Spring stuff -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+
+		<!-- Connector stuff -->
+<!--		<dependency>-->
+<!--			<groupId>com.evolveum.polygon.scim2</groupId>-->
+<!--			<artifactId>connector-scim2-common</artifactId>-->
+<!--			<version>${scim-connector.version}</version>-->
+<!--		</dependency>-->
+
+		<!-- Other stuff -->
+		<dependency>
+			<groupId>org.apache.groovy</groupId>
+			<artifactId>groovy</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains</groupId>
+			<artifactId>annotations</artifactId>
+			<version>${jetbrains-annotations.version}</version>
+		</dependency>
+
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>${testng.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-testng</artifactId>
+			<scope>test</scope>
+			<version>${mockito-testng.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.evolveum.prism</groupId>
+			<artifactId>prism-api</artifactId>
+			<version>${prism.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.evolveum.prism</groupId>
+			<artifactId>prism-impl</artifactId>
+			<version>${prism.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.evolveum.midpoint.infra</groupId>
+			<artifactId>common</artifactId>
+			<version>${midpoint.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.8.8</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.evolveum.midpoint</groupId>
+			<artifactId>midpoint-samples</artifactId>
+			<version>4.10-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>info.picocli</groupId>
+			<artifactId>picocli</artifactId>
+			<version>4.7.5</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<docker>
+						<!-- If you use Podman instead of Docker, then without this option, the build of OCI image using
+						this plugin may not work -->
+						<bindHostToBuilder>true</bindHostToBuilder>
+					</docker>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${surefire-testng.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.surefire</groupId>
+						<artifactId>surefire-testng</artifactId>
+						<version>${surefire-testng.version}</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<!-- addresses some warnings -->
+					<argLine>
+						-javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
+						-Xshare:off
+					</argLine>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
