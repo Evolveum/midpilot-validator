@@ -9,10 +9,11 @@
 package com.evolveum.validation.validator;
 
 import com.evolveum.concepts.ValidationLog;
-import com.evolveum.midpoint.prism.ItemDefinition;
-import com.evolveum.midpoint.prism.PrismObjectDefinition;
-import com.evolveum.midpoint.prism.path.ItemPath;
 import com.evolveum.validation.common.SupportedLanguage;
+import com.evolveum.validation.validator.ValidationParams;
+import com.evolveum.validation.validator.ValidationResponse;
+import com.evolveum.validation.validator.ValidatorProvider;
+import com.evolveum.validation.validator.ValidatorProviderImpl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.xml.namespace.QName;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,7 +51,7 @@ public class ValidatorController {
             List<ValidationLog> logs = validatorProvider.getValidator(params).validate(codeSnippet, contentType);
             return ResponseEntity.ok(new ValidationResponse(logs));
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.getMessage());
+            return ResponseEntity.internalServerError().body(e);
         }
     }
 }

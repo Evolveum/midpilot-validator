@@ -13,16 +13,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 
-public class ValidationResponse {
-
-    @JsonSerialize(using = ValidationLogListSerializer.class)
-    private List<ValidationLog> logs;
+public record ValidationResponse(@JsonSerialize(using = ValidationLogSerializer.class) List<ValidationLog> logs) {
 
     public ValidationResponse(List<ValidationLog> logs) {
         this.logs = logs;
-    }
-
-    public List<ValidationLog> getLogs() {
-        return logs;
     }
 }

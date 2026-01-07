@@ -3,8 +3,8 @@ package com.evolveum.validation.converter;
 import com.evolveum.midpoint.prism.ParsingContext;
 import com.evolveum.midpoint.prism.PrismContext;
 import com.evolveum.midpoint.prism.impl.xnode.RootXNodeImpl;
-import com.evolveum.validation.service.PrismContextService;
 import com.evolveum.validation.common.SupportedLanguage;
+import com.evolveum.validation.service.PrismContextService;
 
 /**
  * Created by Dominik.

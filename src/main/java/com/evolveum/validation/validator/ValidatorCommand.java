@@ -11,11 +11,13 @@ package com.evolveum.validation.validator;
 import com.evolveum.concepts.ValidationLog;
 import com.evolveum.validation.common.SupportedLanguage;
 import com.evolveum.validation.util.FileHelper;
+import com.evolveum.validation.validator.ValidationParams;
+import com.evolveum.validation.validator.ValidatorProvider;
+import com.evolveum.validation.validator.ValidatorProviderImpl;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -82,6 +84,10 @@ public class ValidatorCommand implements Runnable {
 
         ValidatorProvider<ValidationParams> validatorProvider = new ValidatorProviderImpl();
         ValidationParams params = new ValidationParams(null, null);
-        List<ValidationLog> logs = validatorProvider.getValidator(params).validate(content, contentType);
+        try {
+            List<ValidationLog> logs = validatorProvider.getValidator(params).validate(content, contentType);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

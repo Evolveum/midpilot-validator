@@ -1,21 +1,19 @@
 /*
- * Copyright (c) 2025 Evolveum and contributors
  *
- * Licensed under the EUPL-1.2 or later.
+ *  * Copyright (C) 2010-2025 Evolveum and contributors
+ *  *
+ *  * Licensed under the EUPL-1.2 or later.
+ *
  */
+
 package com.evolveum.validation.converter;
 
-import com.evolveum.midpoint.prism.impl.xnode.RootXNodeImpl;
 import com.evolveum.validation.common.SupportedLanguage;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 
 /**
  * Created by Dominik.

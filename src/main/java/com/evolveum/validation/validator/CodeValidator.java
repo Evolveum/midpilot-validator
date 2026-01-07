@@ -23,7 +23,7 @@ public interface CodeValidator {
      *
      * @return Validation failure description if the validation fails, empty {@link List} otherwise.
      */
-    List<ValidationLog> validate(String code, SupportedLanguage language);
+    List<ValidationLog> validate(String code, SupportedLanguage language) throws Exception;
 
     /**
      * Compose two validators, by combining their results.

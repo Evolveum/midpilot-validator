@@ -1,7 +1,5 @@
 package com.evolveum.validation.validator;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 import javax.annotation.Nullable;
 
 /**

@@ -1,20 +1,11 @@
-/*
- * Copyright (c) 2010-2018 Evolveum and contributors
- *
- * Licensed under the EUPL-1.2 or later.
- */
 package com.evolveum.validation.validator.groovy;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Collections;
-import java.util.List;
 
 import com.evolveum.concepts.SourceLocation;
 import com.evolveum.concepts.TechnicalMessage;
 import com.evolveum.concepts.ValidationLog;
 import com.evolveum.concepts.ValidationLogType;
 import com.evolveum.validation.common.SupportedLanguage;
+import com.evolveum.validation.validator.CodeValidator;
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
 import groovy.transform.CompileStatic;
@@ -24,7 +15,10 @@ import org.codehaus.groovy.control.customizers.ASTTransformationCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.evolveum.validation.validator.CodeValidator;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Collections;
+import java.util.List;
 
 final class GroovyValidator implements CodeValidator {
 
@@ -51,7 +45,7 @@ final class GroovyValidator implements CodeValidator {
                     .map(m -> {
                         final StringWriter stringWriter = new StringWriter();
                         m.write(new PrintWriter(stringWriter));
-                        return new ValidationLog(ValidationLogType.WARNING, SourceLocation.unknown(), new TechnicalMessage(""), stringWriter.toString());
+                        return new ValidationLog(ValidationLogType.WARNING, ValidationLogType.Specification.UNKNOW, SourceLocation.unknown(), new TechnicalMessage(""), stringWriter.toString());
                     })
                     .toList();
         }
