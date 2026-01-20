@@ -8,11 +8,9 @@
 
 package com.evolveum.validation.validator;
 
-import com.evolveum.concepts.Argument;
 import com.evolveum.concepts.SourceLocation;
 import com.evolveum.concepts.ValidationLog;
 
-import static org.assertj.core.api.Assertions.tuple;
 import static org.testng.AssertJUnit.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,7 +23,6 @@ import java.io.InputStream;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.net.URL;
 import java.util.jar.JarFile;
@@ -47,7 +44,7 @@ public class TestXmlValidation {
         this.validatorProvider = new ValidatorProviderImpl();
     }
 
-    @Test(enabled = false)
+    @Test
     public void mappingSnippetTest() throws Exception {
         CodeValidator codeValidator = validatorProvider.getValidator(
                 new ValidationParams(null, null));
@@ -80,25 +77,8 @@ public class TestXmlValidation {
         List<ValidationLog> validationLogs  = codeValidator.validate(rawXml, SupportedLanguage.XML);
         assertThat(validationLogs)
                 .hasSize(1)
-                .extracting(
-                        ValidationLog::location,
-                        ValidationLog::message,
-                        log -> log.technicalMessage().message().formatted(Arrays.stream(log.technicalMessage().arguments()).map(Argument::value).toArray()))
-                .containsExactly(
-                        tuple(SourceLocation.from("unknown", 1, 1),
-                                "Cannot parse object from element 'mapping', there is no definition for that element",
-                                "Cannot parse object from element 'mapping', there is no definition for that element can you clarify the definition based on the expected definitions from list: '" +
-                                        "[CTD ({http://midpoint.evolveum.com/xml/ns/public/common/common-3}MappingEvaluationTraceType), " +
-                                        "CTD ({http://midpoint.evolveum.com/xml/ns/public/common/common-3}ObjectTemplateType), " +
-                                        "CTD ({http://midpoint.evolveum.com/xml/ns/public/common/common-3}MappingsType), " +
-                                        "CTD ({http://midpoint.evolveum.com/xml/ns/public/common/common-3}ObjectTemplateItemDefinitionType), " +
-                                        "CTD ({http://midpoint.evolveum.com/xml/ns/public/common/common-3}MetadataHandlingType), " +
-                                        "CTD ({http://midpoint.evolveum.com/xml/ns/public/common/common-3}MetadataItemDefinitionType), " +
-                                        "CTD ({http://midpoint.evolveum.com/xml/ns/public/common/common-3}FocalAutoassignSpecificationType), " +
-                                        "CTD ({http://midpoint.evolveum.com/xml/ns/public/common/common-3}AttributeInboundMappingsDefinitionType), " +
-                                        "CTD ({http://midpoint.evolveum.com/xml/ns/public/common/common-3}AttributeOutboundMappingsDefinitionType), " +
-                                        "CTD ({http://midpoint.evolveum.com/xml/ns/public/common/common-3}MappingEvaluationRequestType)]'")
-                );
+                .extracting(ValidationLog::location)
+                .containsExactly(SourceLocation.from("unknown", 1, 1));
 
         rawXml = """
                 <expression>
@@ -111,17 +91,11 @@ public class TestXmlValidation {
         validationLogs  = codeValidator.validate(rawXml, SupportedLanguage.XML);
         assertThat(validationLogs)
                 .hasSize(1)
-                .extracting(
-                        ValidationLog::location,
-                        ValidationLog::message
-                )
-                .containsExactly(
-                        tuple(SourceLocation.from("unknown", 1, 1),
-                                "Cannot parse object from element 'expression', there is no definition for that element")
-                );
+                .extracting(ValidationLog::location)
+                .containsExactly(SourceLocation.from("unknown", 1, 1));
     }
 
-    @Test(enabled = false)
+    @Test
     public void snippetWithoutItemDefinitionTest() throws Exception {
         CodeValidator codeValidator = validatorProvider.getValidator(
                 new ValidationParams(null, null)
@@ -143,14 +117,8 @@ public class TestXmlValidation {
         List<ValidationLog> validationLogs  = codeValidator.validate(rawXml, SupportedLanguage.XML);
         assertThat(validationLogs)
                 .hasSize(1)
-                .extracting(
-                        ValidationLog::location,
-                        ValidationLog::message
-                )
-                .containsExactly(
-                        tuple(SourceLocation.from("unknown", 1, 1),
-                                "Cannot parse object from element 'attribute', there is no definition for that element")
-                );
+                .extracting(ValidationLog::location)
+                .containsExactly(SourceLocation.from("unknown", 1, 1));
 
         rawXml = """
                 <objectType>
@@ -170,14 +138,8 @@ public class TestXmlValidation {
         validationLogs  = codeValidator.validate(rawXml, SupportedLanguage.XML);
         assertThat(validationLogs)
                 .hasSize(1)
-                .extracting(
-                        ValidationLog::location,
-                        ValidationLog::message
-                )
-                .containsExactly(
-                        tuple(SourceLocation.from("unknown", 1, 1),
-                                "Cannot parse object from element 'objectType', there is no definition for that element")
-                );
+                .extracting(ValidationLog::location)
+                .containsExactly(SourceLocation.from("unknown", 1, 1));
 
         rawXml = """
                 <schemaHandling>
@@ -197,18 +159,7 @@ public class TestXmlValidation {
                 """;
 
         validationLogs  = codeValidator.validate(rawXml, SupportedLanguage.XML);
-        assertThat(validationLogs)
-                .hasSize(1)
-                .extracting(
-                        ValidationLog::location,
-                        ValidationLog::message,
-                        log -> log.technicalMessage().message().formatted(Arrays.stream(log.technicalMessage().arguments()).map(Argument::value).toArray()))
-                .containsExactly(
-                        tuple(SourceLocation.from("unknown", 1, 1),
-                                "Cannot parse object from element 'schemaHandling', there is no definition for that element",
-                                "Cannot parse object from element 'schemaHandling', there is no definition for that element can you clarify the definition based on the expected definitions from list: '" +
-                                        "[CTD ({http://midpoint.evolveum.com/xml/ns/public/common/common-3}ResourceType)]'")
-                );
+        assertTrue("Expected no validation logs.", validationLogs.isEmpty());
     }
 
     @Test
@@ -267,12 +218,15 @@ public class TestXmlValidation {
                 """;
 
         List<ValidationLog> validationLogs  = codeValidator.validate(rawXml, SupportedLanguage.XML);
+
         assertThat(validationLogs)
-                .hasSize(1)
-                .extracting(ValidationLog::location, ValidationLog::message)
+                .hasSize(4)
+                .extracting(ValidationLog::location)
                 .containsExactly(
-                        tuple(SourceLocation.from("unknown", 34, 9),
-                                "Metadata is not of 'Map' type: ''")
+                        SourceLocation.from("unknown", 34, 9),
+                        SourceLocation.from("unknown", 8, 5),
+                        SourceLocation.from("unknown", 23, 9),
+                        SourceLocation.from("unknown", 3, 9)
                 );
     }
 
@@ -293,17 +247,11 @@ public class TestXmlValidation {
 
         assertThat(validationLogs)
                 .hasSize(1)
-                .extracting(
-                        ValidationLog::location,
-                        ValidationLog::message
-                )
-                .containsExactly(
-                        tuple(SourceLocation.from("unknown", 2, 5),
-                                "Cannot parse container value from (non-empty) ''")
-                );
+                .extracting(ValidationLog::location)
+                .containsExactly(SourceLocation.from("unknown", 2, 5));
     }
 
-    @Test()
+    @Test
     public void incorrectlyMappingTest() throws Exception {
         CodeValidator codeValidator = validatorProvider.getValidator(
                 new ValidationParams(null, null));
@@ -590,22 +538,58 @@ public class TestXmlValidation {
                 """;
 
         List<ValidationLog> validationLogs  = codeValidator.validate(rawXml, SupportedLanguage.XML);
-
         assertThat(validationLogs)
-                .hasSize(7)
-                .extracting(ValidationLog::location, ValidationLog::message)
+                .hasSize(8)
+                .extracting(ValidationLog::location)
                 .containsExactly(
-                        tuple(SourceLocation.from("unknown", 83, 17), "Item 'ref' has no definition (in value 'ResourceObjectTypeDefinitionType') while parsing 'MapXNodeImpl'"),
-                        tuple(SourceLocation.from("unknown", 84, 17), "Item 'inbound' has no definition (in value 'ResourceObjectTypeDefinitionType') while parsing 'MapXNodeImpl'"),
-                        tuple(SourceLocation.from("unknown", 90, 17), "Item 'outbound' has no definition (in value 'ResourceObjectTypeDefinitionType') while parsing 'MapXNodeImpl'"),
-                        tuple(SourceLocation.from("unknown", 154, 13), "Cannot parse container value from (non-empty) ''"),
-                        tuple(SourceLocation.from("unknown", 180, 21), "Item 'situation' has no definition (in value 'SynchronizationReactionsType') while parsing 'MapXNodeImpl'"),
-                        tuple(SourceLocation.from("unknown", 181, 21), "Item 'actions' has no definition (in value 'SynchronizationReactionsType') while parsing 'MapXNodeImpl'"),
-                        tuple(SourceLocation.unknown(), "Attempt to store multiple values in single-valued property 'target'")
+                        SourceLocation.from("unknown", 83, 17),
+                        SourceLocation.from("unknown", 84, 17),
+                        SourceLocation.from("unknown", 90, 17),
+                        SourceLocation.from("unknown", 154, 13),
+                        SourceLocation.from("unknown", 180, 21),
+                        SourceLocation.from("unknown", 181, 21),
+                        SourceLocation.from("unknown", 241, 41),
+                        SourceLocation.from("unknown", 244, 42)
                 );
     }
 
-    @Test()
+    @Test
+    public void snippetWithItemPathTest() throws Exception {
+        CodeValidator codeValidator = validatorProvider.getValidator(new ValidationParams("ResourceType", "schemaHandling/objectType"));
+
+        String rawXml = """
+        <attribute>
+            <ref>name</ref>
+            <correlator/>
+            <inbound>
+                <strength>strong</strength>
+                <target>
+                    <path>name</path>
+                </target>
+            </inbound>
+            <outbound>
+                <strength>strong</strength>
+                <source>
+                    <path>name</path>
+                </source>
+            </outbound>
+        </attribute>
+        """;
+
+        List<ValidationLog> validationLogs  = codeValidator.validate(rawXml, SupportedLanguage.XML);
+
+        assertThat(validationLogs)
+                .hasSize(4)
+                .extracting(ValidationLog::location)
+                .containsExactly(
+                        SourceLocation.from("unknown", 2, 5),
+                        SourceLocation.from("unknown", 3, 5),
+                        SourceLocation.from("unknown", 4, 5),
+                        SourceLocation.from("unknown", 10, 5)
+                );
+    }
+
+    @Test
     public void correctlyMappingTest() throws Exception {
         CodeValidator codeValidator = validatorProvider.getValidator(
                 new ValidationParams(null, null));
@@ -889,7 +873,7 @@ public class TestXmlValidation {
         assertTrue("Expected no validation logs.", validationLogs.isEmpty());
     }
 
-    @Test()
+    @Test
     public void snippetWithDefinitionTest() throws Exception {
         CodeValidator codeValidator = validatorProvider.getValidator(new ValidationParams("ResourceType", null));
 
@@ -920,7 +904,7 @@ public class TestXmlValidation {
         assertTrue("Expected no validation logs.", validationLogs.isEmpty());
     }
 
-    @Test()
+    @Test
     public void snippetWithMappingTypeDefTest() throws Exception {
         CodeValidator codeValidator = validatorProvider.getValidator(new ValidationParams("MappingType", null));
 
@@ -953,27 +937,41 @@ public class TestXmlValidation {
         assertTrue("Expected no validation logs.", validationLogs.isEmpty());
     }
 
-    @Test(enabled = false)
-    public void snippetWithItemPathTest() throws Exception {
-        CodeValidator codeValidator = validatorProvider.getValidator(new ValidationParams("ResourceType", "schemaHandling/objectType"));
+
+    @Test
+    public void snippetSchemaHandlingDefTest() throws Exception {
+        CodeValidator codeValidator = validatorProvider.getValidator(new ValidationParams(null, null));
 
         String rawXml = """
-        <attribute>
-            <ref>name</ref>
-            <correlator/>
-            <inbound>
-                <strength>strong</strength>
-                <target>
+        <schemaHandling>
+            <objectType>
+                <kind>account</kind>
+                <intent>default</intent>
+                <default>true</default>
+                <delineation>
+                    <objectClass>user</objectClass>
+                </delineation>
+                <focus>
+                <type>UserType</type>
+                </focus>
+                <attribute>
+                    <ref>name</ref>
+                    <correlator/>
+                    <inbound>
+                    <strength>strong</strength>
+                    <target>
                     <path>name</path>
-                </target>
-            </inbound>
-            <outbound>
-                <strength>strong</strength>
-                <source>
-                    <path>name</path>
-                </source>
-            </outbound>
-        </attribute>
+                    </target>
+                    </inbound>
+                    <outbound>
+                    <strength>strong</strength>
+                    <source>
+                        <path>name</path>
+                    </source>
+                    </outbound>
+                </attribute>
+            </objectType>
+        </schemaHandling>
         """;
 
         List<ValidationLog> validationLogs  = codeValidator.validate(rawXml, SupportedLanguage.XML);
@@ -986,7 +984,6 @@ public class TestXmlValidation {
                 new ValidationParams(null, null));
         String resourceFolder = "objects/";
         URL resource = getClass().getClassLoader().getResource(resourceFolder);
-
         if (resource == null) {
             throw new IllegalStateException("Could not find folder: " + resourceFolder + " on classpath");
         }

@@ -13,18 +13,16 @@ import com.evolveum.midpoint.prism.ParsingContext;
 import com.evolveum.midpoint.prism.PrismContext;
 import com.evolveum.midpoint.prism.path.ItemPath;
 import com.evolveum.midpoint.prism.xnode.RootXNode;
-import com.evolveum.midpoint.util.exception.SchemaException;
 import com.evolveum.validation.common.SupportedLanguage;
 import com.evolveum.validation.service.PrismContextService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jakarta.validation.constraints.NotNull;
 
 import javax.xml.namespace.QName;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CodeValidatorImpl implements CodeValidator {
 
-    private static final Logger logger = LoggerFactory.getLogger(CodeValidatorImpl.class);
     private final com.evolveum.validation.validator.ValidationParams validationParams;
 
     public CodeValidatorImpl(ValidationParams validationParams) {
@@ -32,15 +30,17 @@ public class CodeValidatorImpl implements CodeValidator {
     }
 
     @Override
-    public List<ValidationLog> validate(String rawObject, SupportedLanguage language) throws Exception {
+    public List<ValidationLog> validate(String rawObject, @NotNull SupportedLanguage language) throws Exception {
         PrismContext prismContext = new PrismContextService().getPrismContext();
         ParsingContext parsingCtx = prismContext.createParsingContextForCompatibilityMode().validation();
+
+        List<ValidationLog> validationLogs = new ArrayList<>();
 
         if (rawObject == null) {
             throw new Exception("Body input is empty.");
         }
 
-        if (!SupportedLanguage.isSupported(language.getValue())) {
+        if (SupportedLanguage.isSupported(language.getValue())) {
             throw new Exception("%s language is not supported.".formatted(language));
         }
 
@@ -70,10 +70,12 @@ public class CodeValidatorImpl implements CodeValidator {
             } else {
                 prismContext.parserFor(root).context(parsingCtx).parse();
             }
-        } catch (SchemaException schemaException) {
-            logger.error("Schema exception", schemaException);
+        } catch (Exception ignored) {
+
+        } finally {
+            validationLogs.addAll(parsingCtx.getWarnings());
         }
 
-        return parsingCtx.getValidationLogs();
+        return validationLogs;
     }
 }

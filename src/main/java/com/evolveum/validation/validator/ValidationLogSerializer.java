@@ -36,7 +36,7 @@ public class ValidationLogSerializer extends JsonSerializer<List<ValidationLog>>
             gen.writeArrayFieldStart("arguments");
             for (Argument argument : log.technicalMessage().arguments()) {
                 gen.writeStartObject();
-
+                // processing argument values by type
                 if (argument.type().equals(Argument.ArgumentType.DEFINITION_LIST)) {
                     gen.writeArrayFieldStart("definitions");
                     if (argument.value() instanceof ArrayList<?> arrayList) {
@@ -46,9 +46,9 @@ public class ValidationLogSerializer extends JsonSerializer<List<ValidationLog>>
                     }
                     gen.writeEndArray();
                 } else if (argument.type().equals(Argument.ArgumentType.DEFINITION)) {
-                    gen.writeStringField("value", argument.value().toString());
+                    gen.writeStringField("value", argument.value() != null ? argument.value().toString() : null);
                 } else {
-                    gen.writeObjectField("value", argument.value());
+                    gen.writeObjectField("value",  argument.value() != null ? argument.value().getClass() : null);
                 }
 
                 gen.writeObjectField("type", argument.type());

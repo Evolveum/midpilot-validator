@@ -34,7 +34,7 @@ public class Converter {
                 throw new Exception("Body input is empty.");
             }
 
-            if (!SupportedLanguage.isSupported(language.getValue())) {
+            if (SupportedLanguage.isSupported(language.getValue())) {
                 throw new Exception("%s language is not supported.".formatted(language.getValue()));
             }
 

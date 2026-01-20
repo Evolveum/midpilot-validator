@@ -8,10 +8,6 @@
 
 package com.evolveum.validation.validator;
 
-import com.evolveum.validation.validator.CodeValidator;
-import com.evolveum.validation.validator.CodeValidatorImpl;
-import com.evolveum.validation.validator.ValidationParams;
-import com.evolveum.validation.validator.ValidatorProvider;
 import org.springframework.stereotype.Component;
 
 

@@ -9,8 +9,6 @@
 package com.evolveum.validation.converter;
 
 import com.evolveum.validation.common.SupportedLanguage;
-import com.evolveum.validation.converter.Converter;
-import com.evolveum.validation.converter.ConverterParams;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,23 +25,23 @@ import org.springframework.web.bind.annotation.RestController;
 public class ConverterController {
 
     @PostMapping(consumes = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<?> handleXml(@RequestBody String codeSnippet, com.evolveum.validation.converter.ConverterParams params) {
+    public ResponseEntity<?> handleXml(@RequestBody String codeSnippet, ConverterParams params) {
         return convert(codeSnippet, params, SupportedLanguage.XML);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> handleJson(@RequestBody String codeSnippet, com.evolveum.validation.converter.ConverterParams params) {
+    public ResponseEntity<?> handleJson(@RequestBody String codeSnippet, ConverterParams params) {
         return convert(codeSnippet, params, SupportedLanguage.JSON);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_YAML_VALUE)
-    public ResponseEntity<?> handleYaml(@RequestBody String codeSnippet, com.evolveum.validation.converter.ConverterParams params) {
+    public ResponseEntity<?> handleYaml(@RequestBody String codeSnippet, ConverterParams params) {
         return convert(codeSnippet, params, SupportedLanguage.YAML);
     }
 
     public ResponseEntity<?> convert(String codeSnippet, ConverterParams params, SupportedLanguage contentType) {
         try {
-            com.evolveum.validation.converter.Converter convertor = new Converter(params.targetLanguage());
+            Converter convertor = new Converter(params.targetLanguage());
             SupportedLanguage lang = SupportedLanguage
                     .fromValue(params.targetLanguage())
                     .orElseThrow(() -> new IllegalArgumentException(

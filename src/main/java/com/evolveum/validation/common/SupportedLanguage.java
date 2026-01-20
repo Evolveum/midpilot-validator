@@ -39,6 +39,6 @@ public enum SupportedLanguage {
     }
 
     public static boolean isSupported(String value) {
-        return fromValue(value).isPresent();
+        return fromValue(value).isEmpty();
     }
 }
