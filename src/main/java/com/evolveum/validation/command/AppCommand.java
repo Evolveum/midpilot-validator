@@ -32,7 +32,7 @@ public class AppCommand implements CommandLineRunner {
     public final Command VALIDATE_COMMAND = new Command("validate", """
             validate Midpoint object \n \t <file-path-of-object> -f : validate object from file
             \n \t "<snippet-object>" : validate snippet from midpoint object
-            \n \t -midpoint-sample or shortcut -ms : validate all objects in midpoint-samples repository
+            \n \t -midpoint-samples or shortcut -ms : validate all objects in midpoint-samples repository
             """);
     public final Command CONVERT_COMMAND = new Command("convert", """
             convert Midpoint object \n \t "<snippet-object>" <target-language> : convert to target language snippet from midpoint object
@@ -44,7 +44,7 @@ public class AppCommand implements CommandLineRunner {
 
         if (args[0].equals(VALIDATE_COMMAND.name())) {
             if (args.length == 2) {
-                 if (args[1].equals("-ms") || args[1].equals("-midpoint-sample")) {
+                 if (args[1].equals("-ms") || args[1].equals("-midpoint-samples")) {
                      processMidpointSamples();
                 } else {
                      String code = args[1];
