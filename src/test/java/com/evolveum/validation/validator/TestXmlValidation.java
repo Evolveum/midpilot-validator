@@ -554,8 +554,40 @@ public class TestXmlValidation {
     }
 
     @Test
+    public void snippetWithItemPathInvalidTest() throws Exception {
+        CodeValidator codeValidator = validatorProvider.getValidator(new ValidationParams("ResourceType", "schemaHandling/objectType/attribute"));
+
+        String rawXml = """
+        <attribute>
+            <refa>name</refa>
+            <correlator/>
+            <inbound>
+                <strength>strong</strength>
+                <target>
+                    <path>name</path>
+                </target>
+            </inbound>
+            <outbound>
+                <strength>strong</strength>
+                <source>
+                    <path>name</path>
+                </source>
+            </outbound>
+        </attribute>
+        """;
+
+        List<ValidationLog> validationLogs  = codeValidator.validate(rawXml, SupportedLanguage.XML);
+        assertThat(validationLogs)
+                .hasSize(1)
+                .extracting(ValidationLog::location)
+                .containsExactly(
+                        SourceLocation.from("unknown", 2, 5)
+                );
+    }
+
+    @Test
     public void snippetWithItemPathTest() throws Exception {
-        CodeValidator codeValidator = validatorProvider.getValidator(new ValidationParams("ResourceType", "schemaHandling/objectType"));
+        CodeValidator codeValidator = validatorProvider.getValidator(new ValidationParams("ResourceType", "schemaHandling/objectType/attribute"));
 
         String rawXml = """
         <attribute>
@@ -577,16 +609,34 @@ public class TestXmlValidation {
         """;
 
         List<ValidationLog> validationLogs  = codeValidator.validate(rawXml, SupportedLanguage.XML);
+        assertTrue("Expected no validation logs.", validationLogs.isEmpty());
+    }
 
-        assertThat(validationLogs)
-                .hasSize(4)
-                .extracting(ValidationLog::location)
-                .containsExactly(
-                        SourceLocation.from("unknown", 2, 5),
-                        SourceLocation.from("unknown", 3, 5),
-                        SourceLocation.from("unknown", 4, 5),
-                        SourceLocation.from("unknown", 10, 5)
-                );
+    @Test
+    public void snippetWithComplexTypeDefParameterValidTest() throws Exception {
+        CodeValidator codeValidator = validatorProvider.getValidator(new ValidationParams("ResourceAttributeDefinitionType", null));
+
+        String rawXml = """
+        <attribute>
+            <ref>name</ref>
+            <correlator/>
+            <inbound>
+                <strength>strong</strength>
+                <target>
+                    <path>name</path>
+                </target>
+            </inbound>
+            <outbound>
+                <strength>strong</strength>
+                <source>
+                    <path>name</path>
+                </source>
+            </outbound>
+        </attribute>
+        """;
+
+        List<ValidationLog> validationLogs  = codeValidator.validate(rawXml, SupportedLanguage.XML);
+        assertTrue("Expected no validation logs.", validationLogs.isEmpty());
     }
 
     @Test
