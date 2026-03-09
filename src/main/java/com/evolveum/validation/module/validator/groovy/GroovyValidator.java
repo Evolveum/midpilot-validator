@@ -1,19 +1,18 @@
 /*
- *
  * Copyright (c) 2025 Evolveum and contributors
  *
  * Licensed under the EUPL-1.2 or later.
  *
  */
 
-package com.evolveum.validation.validator.groovy;
+package com.evolveum.validation.module.validator.groovy;
 
 import com.evolveum.concepts.SourceLocation;
 import com.evolveum.concepts.TechnicalMessage;
 import com.evolveum.concepts.ValidationLog;
 import com.evolveum.concepts.ValidationLogType;
 import com.evolveum.validation.common.SupportedLanguage;
-import com.evolveum.validation.validator.CodeValidator;
+import com.evolveum.validation.module.validator.CodeValidator;
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
 import groovy.transform.CompileStatic;

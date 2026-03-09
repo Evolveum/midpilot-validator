@@ -11,13 +11,16 @@ package com.evolveum.validation.validator;
 import com.evolveum.concepts.SourceLocation;
 import com.evolveum.concepts.ValidationLog;
 import com.evolveum.validation.common.SupportedLanguage;
+import com.evolveum.validation.module.validator.CodeValidator;
+import com.evolveum.validation.module.validator.ValidationParams;
+import com.evolveum.validation.module.validator.ValidatorProvider;
+import com.evolveum.validation.module.validator.ValidatorProviderImpl;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
 import static org.testng.AssertJUnit.assertTrue;
 
 /**

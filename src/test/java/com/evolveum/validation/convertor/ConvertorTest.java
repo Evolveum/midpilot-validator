@@ -8,7 +8,7 @@
 
 package com.evolveum.validation.convertor;
 
-import com.evolveum.validation.converter.Converter;
+import com.evolveum.validation.module.converter.Converter;
 import com.evolveum.validation.common.SupportedLanguage;
 import org.json.JSONException;
 import org.json.JSONObject;

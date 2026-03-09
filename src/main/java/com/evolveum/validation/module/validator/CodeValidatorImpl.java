@@ -1,12 +1,11 @@
 /*
- *
  * Copyright (c) 2025 Evolveum and contributors
  *
  * Licensed under the EUPL-1.2 or later.
  *
  */
 
-package com.evolveum.validation.validator;
+package com.evolveum.validation.module.validator;
 
 import com.evolveum.concepts.ValidationLog;
 import com.evolveum.midpoint.prism.ParsingContext;
@@ -23,7 +22,7 @@ import java.util.List;
 
 public class CodeValidatorImpl implements CodeValidator {
 
-    private final com.evolveum.validation.validator.ValidationParams validationParams;
+    private final ValidationParams validationParams;
 
     public CodeValidatorImpl(ValidationParams validationParams) {
         this.validationParams = validationParams;

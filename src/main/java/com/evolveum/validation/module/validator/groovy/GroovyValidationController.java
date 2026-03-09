@@ -1,16 +1,14 @@
 /*
- *
  * Copyright (c) 2025 Evolveum and contributors
  *
  * Licensed under the EUPL-1.2 or later.
  *
  */
 
-package com.evolveum.validation.validator.groovy;
+package com.evolveum.validation.module.validator.groovy;
 
-import com.evolveum.validation.validator.ValidationResult;
-import com.evolveum.validation.validator.ValidatorProvider;
-import com.evolveum.validation.validator.groovy.GroovyValidationParams;
+import com.evolveum.validation.module.validator.ValidationResult;
+import com.evolveum.validation.module.validator.ValidatorProvider;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

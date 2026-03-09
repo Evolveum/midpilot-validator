@@ -13,6 +13,7 @@ import static org.testng.Assert.assertTrue;
 import java.util.List;
 
 import com.evolveum.concepts.ValidationLog;
+import com.evolveum.validation.module.validator.groovy.GroovyValidator;
 import org.testng.annotations.Test;
 
 public class GroovyCodeValidatorImplTest {

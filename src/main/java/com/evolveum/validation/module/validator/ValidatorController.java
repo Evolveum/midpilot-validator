@@ -1,19 +1,14 @@
 /*
- *
  * Copyright (c) 2025 Evolveum and contributors
  *
  * Licensed under the EUPL-1.2 or later.
  *
  */
 
-package com.evolveum.validation.validator;
+package com.evolveum.validation.module.validator;
 
 import com.evolveum.concepts.ValidationLog;
 import com.evolveum.validation.common.SupportedLanguage;
-import com.evolveum.validation.validator.ValidationParams;
-import com.evolveum.validation.validator.ValidationResponse;
-import com.evolveum.validation.validator.ValidatorProvider;
-import com.evolveum.validation.validator.ValidatorProviderImpl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

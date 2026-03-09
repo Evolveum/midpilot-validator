@@ -10,12 +10,12 @@ package com.evolveum.validation.command;
 
 import com.evolveum.concepts.ValidationLog;
 import com.evolveum.validation.common.SupportedLanguage;
-import com.evolveum.validation.converter.Converter;
-import com.evolveum.validation.converter.ConverterParams;
+import com.evolveum.validation.module.converter.Converter;
+import com.evolveum.validation.module.converter.ConverterParams;
 import com.evolveum.validation.util.LanguageUtils;
-import com.evolveum.validation.validator.ValidationParams;
-import com.evolveum.validation.validator.ValidatorProvider;
-import com.evolveum.validation.validator.ValidatorProviderImpl;
+import com.evolveum.validation.module.validator.ValidationParams;
+import com.evolveum.validation.module.validator.ValidatorProvider;
+import com.evolveum.validation.module.validator.ValidatorProviderImpl;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
