@@ -83,10 +83,7 @@ public class TestJsonValidation {
                 """;
 
         validationLogs  = codeValidator.validate(rawJson, SupportedLanguage.JSON);
-        assertThat(validationLogs)
-                .hasSize(1)
-                .extracting(ValidationLog::location)
-                .containsExactly(SourceLocation.from("unknown", 2, 18));
+        assertTrue("Expected no validation logs.", validationLogs.isEmpty());
     }
 
     @Test

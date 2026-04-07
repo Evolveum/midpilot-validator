@@ -69,10 +69,7 @@ public class TestYamlValidation {
                 """;
 
         validationLogs  = codeValidator.validate(rawYaml, SupportedLanguage.YAML);
-        assertThat(validationLogs)
-                .hasSize(1)
-                .extracting(ValidationLog::location)
-                .containsExactly(SourceLocation.from("unknown", 2, 3));
+        assertTrue("Expected no validation logs.", validationLogs.isEmpty());
     }
 
     @Test

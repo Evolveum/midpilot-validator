@@ -33,7 +33,7 @@ public class CodeValidatorImpl implements CodeValidator {
         PrismContext prismContext = new PrismContextService().getPrismContext();
         ParsingContext parsingCtx = prismContext.createParsingContextForCompatibilityMode().validation();
 
-        List<ValidationLog> validationLogs = new ArrayList<>();
+        List<ValidationLog> validationLogs;
 
         if (rawObject == null) {
             throw new Exception("Body input is empty.");
@@ -70,9 +70,8 @@ public class CodeValidatorImpl implements CodeValidator {
                 prismContext.parserFor(root).context(parsingCtx).parse();
             }
         } catch (Exception ignored) {
-
         } finally {
-            validationLogs.addAll(parsingCtx.getWarnings());
+            validationLogs = new ArrayList<>(parsingCtx.getWarnings());
         }
 
         return validationLogs;

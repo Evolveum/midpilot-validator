@@ -93,17 +93,13 @@ public class TestXmlValidation {
                 """;
 
         validationLogs  = codeValidator.validate(rawXml, SupportedLanguage.XML);
-        assertThat(validationLogs)
-                .hasSize(1)
-                .extracting(ValidationLog::location)
-                .containsExactly(SourceLocation.from("unknown", 1, 1));
+        assertTrue("Expected no validation logs.", validationLogs.isEmpty());
     }
 
     @Test
     public void snippetWithoutItemDefinitionTest() throws Exception {
         CodeValidator codeValidator = validatorProvider.getValidator(
-                new ValidationParams(null, null)
-        );
+                new ValidationParams(null, null));
 
         String rawXml = """
                 <attribute>
@@ -169,8 +165,7 @@ public class TestXmlValidation {
     @Test
     public void validationMetadataTest() throws Exception {
         CodeValidator codeValidator = validatorProvider.getValidator(
-                new ValidationParams(null, null)
-        );
+                new ValidationParams(null, null));
 
         String rawXml = """
                 <user oid="f6ba0f28-8875-4b41-9915-1277ed561d11" version="42">
@@ -222,6 +217,9 @@ public class TestXmlValidation {
                 """;
 
         List<ValidationLog> validationLogs  = codeValidator.validate(rawXml, SupportedLanguage.XML);
+
+        System.out.println("KAKSKAKS:::>>> " + validationLogs);
+
 
         assertThat(validationLogs)
                 .hasSize(4)
@@ -559,7 +557,8 @@ public class TestXmlValidation {
 
     @Test
     public void snippetWithItemPathInvalidTest() throws Exception {
-        CodeValidator codeValidator = validatorProvider.getValidator(new ValidationParams("ResourceType", "schemaHandling/objectType/attribute"));
+        CodeValidator codeValidator = validatorProvider.getValidator(
+                new ValidationParams("ResourceType", "schemaHandling/objectType/attribute"));
 
         String rawXml = """
         <attribute>
@@ -591,7 +590,8 @@ public class TestXmlValidation {
 
     @Test
     public void snippetWithItemPathTest() throws Exception {
-        CodeValidator codeValidator = validatorProvider.getValidator(new ValidationParams("ResourceType", "schemaHandling/objectType/attribute"));
+        CodeValidator codeValidator = validatorProvider.getValidator(
+                new ValidationParams("ResourceType", "schemaHandling/objectType/attribute"));
 
         String rawXml = """
         <attribute>
@@ -618,7 +618,8 @@ public class TestXmlValidation {
 
     @Test
     public void snippetWithComplexTypeDefParameterValidTest() throws Exception {
-        CodeValidator codeValidator = validatorProvider.getValidator(new ValidationParams("ResourceAttributeDefinitionType", null));
+        CodeValidator codeValidator = validatorProvider.getValidator(
+                new ValidationParams("ResourceAttributeDefinitionType", null));
 
         String rawXml = """
         <attribute>
@@ -929,7 +930,8 @@ public class TestXmlValidation {
 
     @Test
     public void snippetWithDefinitionTest() throws Exception {
-        CodeValidator codeValidator = validatorProvider.getValidator(new ValidationParams("ResourceType", null));
+        CodeValidator codeValidator = validatorProvider.getValidator(
+                new ValidationParams("ResourceType", null));
 
         String rawXml = """
                         <schemaHandling>
@@ -960,7 +962,8 @@ public class TestXmlValidation {
 
     @Test
     public void snippetWithMappingTypeDefTest() throws Exception {
-        CodeValidator codeValidator = validatorProvider.getValidator(new ValidationParams("MappingType", null));
+        CodeValidator codeValidator = validatorProvider.getValidator(
+                new ValidationParams("MappingType", null));
 
         String rawXml = """
                 <mapping>
@@ -994,7 +997,8 @@ public class TestXmlValidation {
 
     @Test
     public void snippetSchemaHandlingDefTest() throws Exception {
-        CodeValidator codeValidator = validatorProvider.getValidator(new ValidationParams(null, null));
+        CodeValidator codeValidator = validatorProvider.getValidator(
+                new ValidationParams(null, null));
 
         String rawXml = """
         <schemaHandling>

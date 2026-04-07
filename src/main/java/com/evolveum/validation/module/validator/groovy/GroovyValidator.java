@@ -27,13 +27,13 @@ import java.io.StringWriter;
 import java.util.Collections;
 import java.util.List;
 
-final class GroovyValidator implements CodeValidator {
+public class GroovyValidator implements CodeValidator {
 
     private static final Logger LOG = LoggerFactory.getLogger(GroovyValidator.class);
 
     private final Class<? extends Script> baseScriptClass;
 
-    GroovyValidator(Class<? extends Script> baseScriptClass) {
+    public GroovyValidator(Class<? extends Script> baseScriptClass) {
         this.baseScriptClass = baseScriptClass;
     }
 

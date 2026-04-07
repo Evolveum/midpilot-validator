@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ValidationLogSerializer extends JsonSerializer<List<ValidationLog>> {
+
     @Override
     public void serialize(List<ValidationLog> value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         gen.writeStartArray();
@@ -47,7 +48,7 @@ public class ValidationLogSerializer extends JsonSerializer<List<ValidationLog>>
                 } else if (argument.type().equals(Argument.ArgumentType.DEFINITION)) {
                     gen.writeStringField("value", argument.value() != null ? argument.value().toString() : null);
                 } else {
-                    gen.writeObjectField("value",  argument.value() != null ? argument.value().getClass() : null);
+                    gen.writeObjectField("value",  argument.value());
                 }
 
                 gen.writeObjectField("type", argument.type());
