@@ -42,7 +42,7 @@
 	</scm>
 	<properties>
 		<argLine/>
-		<java.version>21</java.version>
+		<java.version>17</java.version>
 		<testng.version>7.11.0</testng.version>
 		<surefire-testng.version>3.1.2</surefire-testng.version>
 		<mockito-testng.version>0.5.2</mockito-testng.version>
@@ -126,6 +126,11 @@
 		<dependency>
 			<groupId>com.evolveum.midpoint.infra</groupId>
 			<artifactId>common</artifactId>
+			<version>${midpoint.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.evolveum.midpoint.model</groupId>
+			<artifactId>model-common</artifactId>
 			<version>${midpoint.version}</version>
 		</dependency>
 		<dependency>

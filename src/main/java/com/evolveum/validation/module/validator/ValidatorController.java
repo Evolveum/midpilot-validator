@@ -8,12 +8,16 @@
 package com.evolveum.validation.module.validator;
 
 import com.evolveum.concepts.ValidationLog;
+import com.evolveum.midpoint.prism.PrismContext;
 import com.evolveum.validation.common.SupportedLanguage;
+import com.evolveum.validation.module.validator.mel.MelValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -24,6 +28,13 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/validate")
 public class ValidatorController {
+
+    private final PrismContext prismContext;
+
+    @Autowired
+    public ValidatorController(PrismContext prismContext) {
+        this.prismContext = prismContext;
+    }
 
     @PostMapping(consumes = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<?> handleXml(@RequestBody String codeSnippet, ValidationParams params) {
@@ -38,6 +49,31 @@ public class ValidatorController {
     @PostMapping(consumes = MediaType.APPLICATION_YAML_VALUE)
     public ResponseEntity<?> handleYaml(@RequestBody String codeSnippet, ValidationParams params) {
         return validate(codeSnippet, params, SupportedLanguage.YAML);
+    }
+
+    @PostMapping(consumes = "text/x-mel")
+    public ResponseEntity<?> handleMel(
+            @RequestBody String codeSnippet,
+            @RequestParam String variableName,
+            @RequestParam String variableType,
+            @RequestParam(required = false) String testValue) {
+        try {
+            MelValidator validator = new MelValidator(this.prismContext, null, null);
+
+            Class<?> varType = Class.forName(variableType);
+            List<ValidationLog> logs = validator.validate(
+                    codeSnippet,
+                    variableName,
+                    varType,
+                    testValue
+            );
+
+            return ResponseEntity.ok(new ValidationResponse(logs));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError()
+                    .body("Error during MEL validation: " + e.getClass().getName() + ": " + e.getMessage());
+        }
     }
 
     private ResponseEntity<?> validate(@RequestBody String codeSnippet, ValidationParams params, SupportedLanguage contentType) {
