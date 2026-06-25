@@ -20,7 +20,8 @@ public enum SupportedLanguage {
 
     XML(PrismContext.LANG_XML),
     JSON(PrismContext.LANG_JSON),
-    YAML(PrismContext.LANG_YAML);
+    YAML(PrismContext.LANG_YAML),
+    MEL("mel");
 
     private final String value;
 

@@ -33,17 +33,15 @@ public interface CodeValidator {
     List<ValidationLog> validate(String code, SupportedLanguage language) throws Exception;
 
     /**
-     * Compose two validators, by combining their results.
+     * Validate MEL script with variable context.
      *
-     * @param nextValidator the next validator which should be composed with the current one.
-     * @return the code validator, whose validation result will be combination of validation results of both composed
-     * validators.
+     * @param script the MEL code snippet to validate
+     * @param variableName the name of the variable available in the MEL context
+     * @param variableType the type of the variable
+     * @param testValue the test value for the variable (can be null)
+     *
+     * @return Validation failure description if the validation fails, empty {@link List} otherwise.
      */
-    default CodeValidator compose(CodeValidator nextValidator) {
-        return (code, lang) -> {
-            final List<ValidationLog> validationResults = this.validate(code, lang);
-            validationResults.addAll(nextValidator.validate(code, lang));
-            return validationResults;
-        };
-    }
+    List<ValidationLog> validate(String script, String variableName, Class<?> variableType, Object testValue);
+
 }

@@ -7,6 +7,9 @@
 
 package com.evolveum.validation.module.validator.mel;
 
+import com.evolveum.validation.module.validator.CodeValidator;
+import com.evolveum.validation.common.SupportedLanguage;
+
 import com.evolveum.concepts.SourceLocation;
 import com.evolveum.concepts.TechnicalMessage;
 import com.evolveum.concepts.ValidationLog;
@@ -30,7 +33,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.List;
 
-public class MelValidator {
+public class MelValidator implements CodeValidator {
 
     private static final Logger LOG = LoggerFactory.getLogger(MelValidator.class);
 
@@ -45,15 +48,21 @@ public class MelValidator {
                 protector,
                 localizationService,
                 (BasicExpressionFunctions) basicFunctionLibraryBinding.getImplementation(),
+                // MidpointFunctions is intentionally set to null. While it would enable additional MEL functions
+                // (like midpoint.getObject(), midpoint.executeChanges()), it requires the full MidPoint infrastructure
+                // (ModelService, RepositoryService, ProvisioningService, etc.) which is not available in this
+                // lightweight validation service. Basic MEL validation and expressions work without it.
                 null
         );
     }
 
-    public List<ValidationLog> validate(
-            String script,
-            String variableName,
-            Class<?> variableType,
-            Object testValue) {
+    @Override
+    public List<ValidationLog> validate(String script, SupportedLanguage language) throws Exception {
+        throw new UnsupportedOperationException("This version of validate method is not supported");
+    }
+
+    @Override
+    public List<ValidationLog> validate(String script, String variableName, Class<?> variableType, Object testValue) {
 
         boolean hasTestData = variableName != null;
         String contextDescription = hasTestData ? "MEL validation with test data" : "MEL syntax validation";

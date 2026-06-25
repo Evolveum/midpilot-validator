@@ -76,4 +76,9 @@ public class CodeValidatorImpl implements CodeValidator {
 
         return validationLogs;
     }
+
+    @Override
+    public List<ValidationLog> validate(String script, String variableName, Class<?> variableType, Object testValue) {
+        throw new UnsupportedOperationException("This version of validate method is not supported");
+    }
 }

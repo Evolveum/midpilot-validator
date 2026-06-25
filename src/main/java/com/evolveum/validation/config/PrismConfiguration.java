@@ -7,6 +7,8 @@
 
 package com.evolveum.validation.config;
 
+import com.evolveum.midpoint.common.LocalizationService;
+import com.evolveum.midpoint.common.LocalizationServiceImpl;
 import com.evolveum.midpoint.prism.PrismContext;
 import com.evolveum.midpoint.prism.crypto.Protector;
 import com.evolveum.midpoint.prism.impl.crypto.KeyStoreBasedProtectorImpl;
@@ -27,5 +29,12 @@ public class PrismConfiguration {
     public PrismContext prismContext() throws SchemaException, java.io.IOException {
         MidPointPrismContextFactory factory = new MidPointPrismContextFactory();
         return factory.createPrismContext();
+    }
+
+    @Bean
+    public LocalizationService localizationService() {
+        LocalizationServiceImpl service = new LocalizationServiceImpl();
+        service.init();
+        return service;
     }
 }

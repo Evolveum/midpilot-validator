@@ -52,6 +52,7 @@ public class ConverterController {
                         case XML  -> MediaType.APPLICATION_XML;
                         case JSON -> MediaType.APPLICATION_JSON;
                         case YAML -> MediaType.APPLICATION_YAML;
+                        case MEL -> new MediaType("application", "x-mel");
                     }).body(convertor.convert(codeSnippet, contentType));
         } catch (Exception e) {
             return ResponseEntity

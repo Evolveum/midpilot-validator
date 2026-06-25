@@ -59,4 +59,9 @@ public class GroovyValidator implements CodeValidator {
         return Collections.emptyList();
     }
 
+    @Override
+    public List<ValidationLog> validate(String code, String variableName, Class<?> variableType, Object testValue) {
+        throw new UnsupportedOperationException("This version of validate method is not supported");
+    }
+
 }
