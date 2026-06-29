@@ -156,6 +156,9 @@
 						this plugin may not work -->
 						<bindHostToBuilder>true</bindHostToBuilder>
 					</docker>
+                    <image>
+                        <name>registry.evolveum.com/sandbox/validation-services</name>
+                    </image>
 				</configuration>
 			</plugin>
 			<plugin>
