@@ -8,6 +8,7 @@
 package com.evolveum.validation.module.validator.mel;
 
 import com.evolveum.validation.module.validator.CodeValidator;
+import com.evolveum.validation.module.validator.EvaluationResponse;
 import com.evolveum.validation.common.SupportedLanguage;
 
 import com.evolveum.concepts.SourceLocation;
@@ -22,6 +23,8 @@ import com.evolveum.midpoint.model.common.expression.functions.FunctionLibraryUt
 import com.evolveum.midpoint.model.common.expression.script.ScriptExpressionEvaluationContext;
 import com.evolveum.midpoint.model.common.expression.script.mel.MelScriptEvaluator;
 import com.evolveum.midpoint.prism.PrismContext;
+import com.evolveum.midpoint.prism.PrismPropertyValue;
+import com.evolveum.midpoint.prism.PrismValue;
 import com.evolveum.midpoint.prism.crypto.Protector;
 import com.evolveum.midpoint.schema.expression.TypedValue;
 import com.evolveum.midpoint.schema.expression.VariablesMap;
@@ -30,6 +33,7 @@ import com.evolveum.midpoint.xml.ns._public.common.common_3.ScriptExpressionEval
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -98,6 +102,68 @@ public class MelValidator implements CodeValidator {
                     e.getMessage()
             ));
         }
+    }
+
+    @Override
+    public EvaluationResponse evaluateWithResult(String script, String variableName, Class<?> variableType, Object testValue) {
+
+        boolean hasTestData = variableName != null;
+        String contextDescription = hasTestData ? "MEL evaluation with test data" : "MEL syntax evaluation";
+        String operationName = hasTestData ? "mel-evaluation-with-test-data" : "mel-evaluation";
+
+        try {
+            var scriptBean = new ScriptExpressionEvaluatorType();
+            scriptBean.setCode(script);
+            scriptBean.setLanguage(MelScriptEvaluator.LANGUAGE_URL);
+
+            VariablesMap variables = new VariablesMap();
+            if (hasTestData) {
+                variables.put(variableName, new TypedValue<>(testValue, variableType));
+            }
+
+            ScriptExpressionEvaluationContext context = new ScriptExpressionEvaluationContext();
+            context.setScriptBean(scriptBean);
+            context.setVariables(variables);
+            context.setContextDescription(contextDescription);
+            context.setResult(new OperationResult(operationName));
+            context.setEvaluateNew(false);
+
+            Object result = melScriptEvaluator.evaluate(context);
+
+            Object unwrappedValue = unwrapPrismValue(result);
+
+            return EvaluationResponse.success(unwrappedValue);
+        } catch (Exception e) {
+            LOG.error("MEL evaluation error: {}", contextDescription, e);
+            return EvaluationResponse.error(e.getMessage(), e.getClass().getSimpleName());
+        }
+    }
+
+    private Object unwrapPrismValue(Object value) {
+        if (value == null) {
+            return null;
+        }
+
+        if (value instanceof PrismPropertyValue<?> propertyValue) {
+            return unwrapPrismValue(propertyValue.getRealValue());
+        }
+
+        if (value instanceof PrismValue prismValue) {
+            return unwrapPrismValue(prismValue.getRealValue());
+        }
+
+        if (value instanceof List<?> list) {
+            List<Object> unwrappedList = new ArrayList<>();
+            for (Object item : list) {
+                unwrappedList.add(unwrapPrismValue(item));
+            }
+            if (unwrappedList.size() == 1) {
+                return unwrappedList.get(0);
+            }
+            return unwrappedList;
+        }
+
+        return value;
     }
 
 }

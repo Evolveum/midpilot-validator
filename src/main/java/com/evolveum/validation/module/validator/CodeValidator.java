@@ -33,15 +33,27 @@ public interface CodeValidator {
     List<ValidationLog> validate(String code, SupportedLanguage language) throws Exception;
 
     /**
-     * Validate MEL script with variable context.
+     * Validate script with variable context.
      *
-     * @param script the MEL code snippet to validate
-     * @param variableName the name of the variable available in the MEL context
+     * @param script the code snippet to validate
+     * @param variableName the name of the variable available in the context
      * @param variableType the type of the variable
      * @param testValue the test value for the variable (can be null)
      *
      * @return Validation failure description if the validation fails, empty {@link List} otherwise.
      */
     List<ValidationLog> validate(String script, String variableName, Class<?> variableType, Object testValue);
+
+    /**
+     * Evaluate script with variable context and return the transformed value or error.
+     *
+     * @param script the code snippet to evaluate
+     * @param variableName the name of the variable available in the context
+     * @param variableType the type of the variable
+     * @param testValue the test value for the variable (can be null)
+     *
+     * @return {@link EvaluationResponse} containing either the transformed value or error details.
+     */
+    EvaluationResponse evaluateWithResult(String script, String variableName, Class<?> variableType, Object testValue);
 
 }

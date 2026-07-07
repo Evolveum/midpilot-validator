@@ -11,6 +11,7 @@ import com.evolveum.concepts.ValidationLog;
 import com.evolveum.midpoint.prism.util.JavaTypeConverter;
 import com.evolveum.validation.common.SupportedLanguage;
 import com.evolveum.validation.module.validator.CodeValidator;
+import com.evolveum.validation.module.validator.EvaluationResponse;
 import com.evolveum.validation.module.validator.ValidationResponse;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -58,6 +59,34 @@ public class MelValidationController {
             LOG.error("Error during MEL validation", e);
             return ResponseEntity.internalServerError()
                     .body("Error during MEL validation: " + e.getClass().getName() + ": " + e.getMessage());
+        }
+    }
+
+    @PostMapping(path = "/evaluate", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> evaluate(@RequestBody String script, @Valid MelValidationParams configuration) {
+        try {
+            CodeValidator validator = validatorProvider.getValidator(SupportedLanguage.MEL);
+
+            Class<?> varType = Class.forName(configuration.variableType());
+            Object testValue = configuration.testValue() != null
+                    ? JavaTypeConverter.convert(varType, configuration.testValue())
+                    : null;
+
+            EvaluationResponse response = validator.evaluateWithResult(
+                    script,
+                    configuration.variableName(),
+                    varType,
+                    testValue
+            );
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            LOG.error("Error during MEL evaluation", e);
+            return ResponseEntity.internalServerError()
+                    .body(EvaluationResponse.error(
+                            "Error during MEL evaluation: " + e.getMessage(),
+                            e.getClass().getSimpleName()
+                    ));
         }
     }
 }

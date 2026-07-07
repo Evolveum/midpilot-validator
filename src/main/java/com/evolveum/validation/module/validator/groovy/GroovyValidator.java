@@ -13,6 +13,8 @@ import com.evolveum.concepts.ValidationLog;
 import com.evolveum.concepts.ValidationLogType;
 import com.evolveum.validation.common.SupportedLanguage;
 import com.evolveum.validation.module.validator.CodeValidator;
+import com.evolveum.validation.module.validator.EvaluationResponse;
+
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
 import groovy.transform.CompileStatic;
@@ -62,6 +64,11 @@ public class GroovyValidator implements CodeValidator {
     @Override
     public List<ValidationLog> validate(String code, String variableName, Class<?> variableType, Object testValue) {
         throw new UnsupportedOperationException("This version of validate method is not supported");
+    }
+
+    @Override
+    public EvaluationResponse evaluateWithResult(String script, String variableName, Class<?> variableType, Object testValue) {
+        throw new UnsupportedOperationException("Evaluation with result is not supported by this validator");
     }
 
 }
